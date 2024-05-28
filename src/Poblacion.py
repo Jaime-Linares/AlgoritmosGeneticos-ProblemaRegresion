@@ -8,7 +8,18 @@ class Poblacion:
         self.nAtrib = nAtrib
 
 
-    # Función para crear la población inicial
-    # matriz con valoresde numero decimales aleatorios en el rango [-1000, 1000] de dimension nInd x (2*nAtrib)+1
+    # función para crear la población inicial
+    # matriz con valores de numero decimales aleatorios de dimension nInd x (2*nAtrib)+1
     def initial(self):
-        return np.random.uniform(-1000, 1001, size=(self.nInd, 2*(self.nAtrib)+1))
+        poblacion_inicial = np.zeros((self.nInd, 2 * self.nAtrib + 1))
+
+        # números aleatorios para las posiciones pares entre -100 y 100
+        indices_pares = range(0, 2 * self.nAtrib, 2)
+        poblacion_inicial[:, indices_pares] = np.random.uniform(-100, 100, size=(self.nInd, self.nAtrib))
+        # números aleatorios para las posiciones impares (excepto la última) entre -5 y 5
+        indices_impares = range(1, 2 * self.nAtrib, 2)
+        poblacion_inicial[:, indices_impares] = np.random.uniform(-5, 5, size=(self.nInd, self.nAtrib))
+        # números aleatorio en el rango para la última posición impar entre -100 y 100
+        poblacion_inicial[:, 2*self.nAtrib] = np.random.uniform(-100, 100, size=self.nInd)
+
+        return poblacion_inicial
