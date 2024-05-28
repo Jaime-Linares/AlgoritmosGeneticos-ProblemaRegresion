@@ -18,7 +18,7 @@ class Poblacion:
         poblacion_inicial[:, indices_pares] = np.random.uniform(-100, 100, size=(self.nInd, self.nAtrib))
         # números aleatorios para las posiciones impares (excepto la última) entre -5 y 5
         indices_impares = range(1, 2 * self.nAtrib, 2)
-        poblacion_inicial[:, indices_impares] = np.random.uniform(-5, 5, size=(self.nInd, self.nAtrib))
+        poblacion_inicial[:, indices_impares] = np.random.randint(0, 5, size=(self.nInd, self.nAtrib))
         # números aleatorio en el rango para la última posición impar entre -100 y 100
         poblacion_inicial[:, 2*self.nAtrib] = np.random.uniform(-100, 100, size=self.nInd)
 
