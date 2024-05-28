@@ -3,6 +3,7 @@ import pandas as pd
 import cmath
 
 from src.Poblacion import Poblacion
+from src.Padres import Padres
 
 
 class AG:
@@ -31,7 +32,13 @@ class AG:
 
         # fitness de la población inicial
         fitness_poblacion_inicial = self.__fitness_poblacion(datos, poblacion_inicial)
-        print(fitness_poblacion_inicial)
+        
+        # --------------------------------------------------------------------------------------
+        # ------------------------------Generamos los padres-------------------------------
+        padres= Padres(fitness_poblacion_inicial,poblacion_inicial)
+        seleccion_padres= padres.seleccion_padres(fitness_poblacion_inicial,poblacion_inicial)
+        print(seleccion_padres)
+        
 
 
         # --------------------------------------------------------------------------------------
@@ -82,29 +89,14 @@ class AG:
         for i in range(0, (parametros.size)-1, 2):    # primero calculamos la suma de los terminos 
             x_i = i // 2        # división entera
             par_i = i
-
-            if valores.iloc[x_i] == 0 and parametros[par_i+1] < 0:  # division por 0
+            
+            if valores.iloc[x_i] == 0 and parametros[par_i+1] == 0: # 0 elevado a 0
                 y_aprox += 0
                 calculos_prohibidos = True
                 break
-            elif valores.iloc[x_i] == 0 and parametros[par_i+1] == 0: # 0 elevado a 0
-                y_aprox += 0
-                calculos_prohibidos = True
-                break
-            else:
-                potencia = valores.iloc[x_i] ** parametros[par_i+1]
-                if np.isnan(potencia):              # numero imaginario
-                    y_aprox += 0
-                    calculos_prohibidos = True
-                    break
-                else:
-                    suma = parametros[par_i] * potencia
-                    if(suma > 1000000000000 and y_aprox > 1000000000000):   # para evitar valores muy grandes
-                        y_aprox += 0
-                        calculos_prohibidos = True
-                        break
-                    else:
-                        y_aprox += parametros[par_i] * potencia
+    
+            potencia = valores.iloc[x_i] ** parametros[par_i+1]
+            y_aprox += parametros[par_i] * potencia
         y_aprox += parametros[-1]   # sumamos el término independiente
 
         if calculos_prohibidos:
