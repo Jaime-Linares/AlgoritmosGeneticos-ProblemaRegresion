@@ -36,8 +36,8 @@ class AG:
         
         # generamos los padres de la población inicial
         k = 3
-        padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd, k)
-        seleccion_padres = padres.seleccion_padres()
+        padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
+        seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
         # generamos los hijos cruzando los padres
         probabilidad_no_cruce = 0.2
