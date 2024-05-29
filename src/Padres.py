@@ -19,7 +19,7 @@ class Padres:
             indices_aleatorios = random.sample(range(0, self.individuos.shape[0]), self.k)
             # obtenemos sus fitness
             fitness_seleccionados = [self.fitness[pos] for pos in indices_aleatorios]
-            # escogemos el mejor de los fitness (que será el menor)
+            # escogemos el individuo con mejor fitness de los k elegidos (que será el menor)
             pos_mayor_fitness = 0
             indiviudo_mayor_fitness = self.individuos[indices_aleatorios[pos_mayor_fitness], :]
             for j in range(1, self.k):
