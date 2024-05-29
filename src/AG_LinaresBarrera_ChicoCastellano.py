@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
+import math
 
 from src.Poblacion import Poblacion
 from src.Padres import Padres
 from src.Cruce import Cruce
 from src.Mutacion import Mutacion
+from src.Prediccion import Prediccion
 
 
 class AG:
@@ -26,9 +28,10 @@ class AG:
         # --------------------------------------------------------------------------------------
         # ---------------DATOS DE ENTRENAMIENTO Y PRIMERA ITERACIÓN DEL ALGORITMO---------------
         datos = pd.read_csv(self.datos_train, na_values=0)     
+        nAtrib = datos.shape[1]-1      # nAtributos = nColumnas - 1
 
         # inicializar población
-        poblacion = Poblacion(self.nInd, datos.shape[1]-1)   # nAtributos = nColumnas - 1
+        poblacion = Poblacion(self.nInd, nAtrib)   
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
@@ -49,27 +52,67 @@ class AG:
         hijos = Mutacion(hijos_cruzados, probabilidad_mutacion)
         hijos_mutados = hijos.mutar()
 
-        # seleccionamos siguiente población
-        
+        # poblacion a iterar
+        poblacion_a_iterar = hijos_mutados
+        tasa_elitismo = 0.2
 
         # --------------------------------------------------------------------------------------
         # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
-        #for i in range(0, self.maxIter):
-        
+        for i in range(0, self.maxIter):
+            # fitness de la población a iterar
+            fitness_hijos_mutados = self.__fitness_poblacion(datos, hijos_mutados)
+
+            # trabajamos para obtener la nueva generación
+            # elegimos los mejores individuos (20%) de la población actual (elitismo)
+            numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
+            indices_mejores_individuos = np.argsort(fitness_hijos_mutados)[:numero_individuos_elitismo]
+            mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * nAtrib + 1))
+            for i in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
+                mejores_individuos[i] = hijos_mutados[indices_mejores_individuos[i]]
+            # generamos los demas individuos de la nueva poblacion mediante cruces y mutaciones de la generación anterior
+            # generamos individuos mediante cruces
+            cruce = Cruce(poblacion_a_iterar, self.nInd - numero_individuos_elitismo , probabilidad_no_cruce)
+            poblacion_cruzada = cruce.cruzar()
+            # generamos individuos mediante mutaciones
+            mutacion = Mutacion(poblacion_cruzada, probabilidad_mutacion)
+            poblacion_mutada = mutacion.mutar()
+            # obtenemos la nueva generación (nueva poblacion)
+            nueva_poblacion = np.concatenate((mejores_individuos, poblacion_mutada), axis=0)
+            fitness_nueva_poblacion = self.__fitness_poblacion(datos, nueva_poblacion)
+
+            # generamos los padres de la población inicial
+            padres = Padres(fitness_nueva_poblacion, nueva_poblacion, self.nInd)
+            seleccion_padres = padres.seleccion_padres_por_torneo(k)
+
+            # generamos los hijos cruzando los padres
+            probabilidad_no_cruce = 0.2
+            cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce)
+            hijos_cruzados = cruce.cruzar()
+
+            # generamos los hijos mutando los hijos cruzados
+            probabilidad_mutacion = 0.1
+            hijos = Mutacion(hijos_cruzados, probabilidad_mutacion)
+            hijos_mutados = hijos.mutar()
+
+            # poblacion a iterar
+            poblacion_a_iterar = hijos_mutados
+
 
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
-        ind = [0.5, -0.3, 0.1] 
+        fitness_poblacion_final = self.__fitness_poblacion(datos, poblacion_a_iterar)
+        mejor_individuo_encontrado = poblacion_a_iterar[np.argmin(fitness_poblacion_final)]
 
 
         # --------------------------------------------------------------------------------------
         # --------------------------SOLUCIÓN SOBRE EL CONJUNTO DE TEST--------------------------
-        y_pred = [1.5, 2.3, -0.9]  
+        prediccion = Prediccion(self.datos_test ,mejor_individuo_encontrado)
+        y_pred = prediccion.predecir()  
 
 
         # --------------------------------------------------------------------------------------
         # devolvemos la mejor solución encontrada y las predicciones sobre el conjunto de test
-        return ind, y_pred
+        return mejor_individuo_encontrado, y_pred
     
 
 
@@ -125,4 +168,5 @@ class AG:
             res = (y_real - y_aprox) ** 2   # calculamos el cuadrado de la diferencia
 
         return res
+
 

@@ -7,8 +7,8 @@ from src.AG_LinaresBarrera_ChicoCastellano import AG
 # Nombre generico del dataset
 nombre_dataset = 'toy1'
 
-nombre_dataset_train = "data/" + nombre_dataset+"_train.csv"
-nombre_dataset_val = nombre_dataset + "_val.csv"
+nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
+nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
 
 
 ag = AG(
@@ -19,9 +19,9 @@ ag = AG(
 	# semilla para numeros aleatorios
 	seed=123, 
 	# numero de individuos
-	nInd = 50, 
+	nInd = 10, 
 	# maximo de iteraciones
-	maxIter = 100 
+	maxIter = 3 
 )
 
 # Ejecucion del AG midiendo el tiempo
@@ -31,11 +31,11 @@ ind, y_pred = ag.run()
 #print(f'Tiempo ejecucion: {(fin-inicio):.2f}')
 
 # Imprimir mejor solución encontrada
-#print(f'Mejor individuo: {ind}')
+print(f'Mejor individuo: {ind}')
 # 0.5*(a1^2) + -0.3*(a2^1) + ... + 10 # --> Se trata de un ejemplo
 
 # Imprimir predicciones sobre el conjunto de test
-#print(f'Predicciones: {y_pred}')
+print(f'Predicciones: {y_pred}')
 #  [-1.53, 1.49, 2.15, ..., -2.77] # --> Se trata de un ejemplo
 
 # Cargar valores reales de 'y' en el conjunto de validacion/test 
