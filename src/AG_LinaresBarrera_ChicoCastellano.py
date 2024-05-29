@@ -23,7 +23,7 @@ class AG:
         np.random.seed(self.seed)       # semilla para reproducibilidad
 
         # --------------------------------------------------------------------------------------
-        # ------CARGAMOS LOS DATOS DE ENTRENAMIENTO Y OBTENEMOS EL MEJOR CROMOSOMA POSIBLE------
+        # ---------------DATOS DE ENTRENAMIENTO Y PRIMERA ITERACIÓN DEL ALGORITMO---------------
         datos = pd.read_csv(self.datos_train, na_values=0)     
 
         # inicializar población
@@ -32,14 +32,19 @@ class AG:
 
         # fitness de la población inicial
         fitness_poblacion_inicial = self.__fitness_poblacion(datos, poblacion_inicial)
+        print(fitness_poblacion_inicial)
         
-        # --------------------------------------------------------------------------------------
-        # ------------------------------Generamos los padres-------------------------------
-        padres= Padres(fitness_poblacion_inicial,poblacion_inicial)
-        seleccion_padres= padres.seleccion_padres(fitness_poblacion_inicial,poblacion_inicial)
+        # generamos los padres de la población inicial
+        k = 3
+        padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd, k)
+        seleccion_padres = padres.seleccion_padres()
         print(seleccion_padres)
-        
 
+
+        # --------------------------------------------------------------------------------------
+        # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
+        #for i in range(0, self.maxIter):
+        
 
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
@@ -75,12 +80,11 @@ class AG:
         return res
 
 
-
     # función para calcular la diferenca entre el valor real y el valor obtenido para tal individuo
     # en tal ecuacion
     def __evalua_individuo(self, valores, parametros):
         res = 0
-        calculos_prohibidos = False     # para evitar divisiones por 0, 0 elevado a 0 o raices cuadradas de negativos
+        calculos_prohibidos = False     # para evitar indeterminaciones como 0 elevado a 0
 
         y_real = valores.iloc[-1]
         y_aprox = 0
@@ -90,18 +94,24 @@ class AG:
             x_i = i // 2        # división entera
             par_i = i
             
-            if valores.iloc[x_i] == 0 and parametros[par_i+1] == 0: # 0 elevado a 0
+            if valores.iloc[x_i] == 0 and parametros[par_i+1] == 0:     # 0 elevado a 0
                 y_aprox += 0
                 calculos_prohibidos = True
                 break
-    
-            potencia = valores.iloc[x_i] ** parametros[par_i+1]
-            y_aprox += parametros[par_i] * potencia
+            elif valores.iloc[x_i] == 0 and parametros[par_i+1] < 0:    # division por 0
+                y_aprox += 0
+                calculos_prohibidos = True
+                break
+            else:                                                       # calculo normal de la ecuación
+                potencia = valores.iloc[x_i] ** parametros[par_i+1]
+                y_aprox += parametros[par_i] * potencia
+
         y_aprox += parametros[-1]   # sumamos el término independiente
 
         if calculos_prohibidos:
             res = 1000000000000
         else:
             res = (y_real - y_aprox) ** 2   # calculamos el cuadrado de la diferencia
+
         return res
 
