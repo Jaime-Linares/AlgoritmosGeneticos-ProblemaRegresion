@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-import cmath
 
 from src.Poblacion import Poblacion
 from src.Padres import Padres
 from src.Cruce import Cruce
+from src.Mutacion import Mutacion
 
 
 class AG:
@@ -38,15 +38,19 @@ class AG:
         k = 3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd, k)
         seleccion_padres = padres.seleccion_padres()
-        print(seleccion_padres)
-        print("\n\n")
 
-        # 
-        cruce= Cruce(seleccion_padres,self.nInd)
-        seleccion_cruce= cruce.cruce()
-        print(seleccion_cruce)
+        # generamos los hijos cruzando los padres
+        probabilidad_no_cruce = 0.2
+        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce)
+        hijos_cruzados = cruce.cruzar()
 
+        # generamos los hijos mutando los hijos cruzados
+        probabilidad_mutacion = 0.1
+        hijos = Mutacion(hijos_cruzados, probabilidad_mutacion)
+        hijos_mutados = hijos.mutar()
 
+        # seleccionamos siguiente población
+        
 
         # --------------------------------------------------------------------------------------
         # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
