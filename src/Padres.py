@@ -1,27 +1,33 @@
 import numpy as np
-import math
+import random
+
 
 class Padres:
 
-    def __init__(self, fitness, individuos):
+    def __init__(self, fitness, individuos, nInd, k):
             self.fitness = fitness
             self.individuos = individuos
+            self.nInd = nInd
+            self.k = k
             
     
-    def seleccion_padres(self,individuos,fitness):
-        #Generamos un diccionario donde las claves son los individuos y el valor el fitness de cada uno
-        pares = zip(individuos, fitness )
-        diccionario = dict(pares)
+    def seleccion_padres(self):
+        padres = np.empty_like(self.individuos)
 
-        #Ordenamos en función del valor de su fitness (de menor a mayor)
-        diccionario_ordenado = dict(sorted(diccionario.items(), key=lambda item: item[0]))
-
-        #seleccionamo el 20% de los individuos con menos fitness
-        numero_individuos= math.ceil(len(self.individuos) * 0.4)
-
-        #Seleccionamos las claves ordenadas
-        claves_ordenadas = sorted(diccionario.keys())
-
-        #Obtener los valores asociados a las primeras 10 claves
-        padres = [diccionario[clave] for clave in claves_ordenadas[:numero_individuos]]
+        for i in range(0, self.nInd):
+            # escogemos tres individuos aleatorios
+            indices_aleatorios = random.sample(range(0, self.individuos.shape[0]), self.k)
+            # obtenemos sus fitness
+            fitness_seleccionados = [self.fitness[pos] for pos in indices_aleatorios]
+            # escogemos el mejor de los fitness (que será el menor)
+            pos_mayor_fitness = 0
+            indiviudo_mayor_fitness = self.individuos[indices_aleatorios[pos_mayor_fitness], :]
+            for j in range(1, self.k):
+                if fitness_seleccionados[j] < fitness_seleccionados[pos_mayor_fitness]:
+                    pos_mayor_fitness = j
+                    indiviudo_mayor_fitness = self.individuos[indices_aleatorios[pos_mayor_fitness], :]
+            # guardamos el individuo con mayor fitness como uno de los padres
+            padres[i] = indiviudo_mayor_fitness
+        
         return padres
+            

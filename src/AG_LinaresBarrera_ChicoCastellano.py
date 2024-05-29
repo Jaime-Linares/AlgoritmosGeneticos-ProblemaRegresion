@@ -32,13 +32,11 @@ class AG:
 
         # fitness de la población inicial
         fitness_poblacion_inicial = self.__fitness_poblacion(datos, poblacion_inicial)
-        print(fitness_poblacion_inicial)
         
         # generamos los padres de la población inicial
         k = 3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd, k)
         seleccion_padres = padres.seleccion_padres()
-        print(seleccion_padres)
 
 
         # --------------------------------------------------------------------------------------
