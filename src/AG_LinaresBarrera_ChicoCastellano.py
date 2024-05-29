@@ -4,6 +4,7 @@ import cmath
 
 from src.Poblacion import Poblacion
 from src.Padres import Padres
+from src.Cruce import Cruce
 
 
 class AG:
@@ -37,6 +38,14 @@ class AG:
         k = 3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd, k)
         seleccion_padres = padres.seleccion_padres()
+        print(seleccion_padres)
+        print("\n\n")
+
+        # 
+        cruce= Cruce(seleccion_padres,self.nInd)
+        seleccion_cruce= cruce.cruce()
+        print(seleccion_cruce)
+
 
 
         # --------------------------------------------------------------------------------------
