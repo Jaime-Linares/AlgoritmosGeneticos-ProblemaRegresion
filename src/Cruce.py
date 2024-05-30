@@ -26,8 +26,6 @@ class Cruce:
         # los añadimos en las n primeras filas de hijos
         seleccionados = self.padres[indices_aleatorios]
         hijos[:numero] = seleccionados
-        
-    
             
         # para el resto de individuos cruzamos aleatoriamente dos de los padres
         while numero < self.numero_individuos:
@@ -51,6 +49,6 @@ class Cruce:
             hijos[numero] = hijo
             numero+=1
             
-
         return hijos
+
 

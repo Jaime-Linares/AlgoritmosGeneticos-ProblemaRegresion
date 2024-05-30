@@ -23,3 +23,5 @@ class Poblacion:
         poblacion_inicial[:, 2*self.nAtrib] = np.random.uniform(-100, 100, size=self.nInd)
 
         return poblacion_inicial
+
+

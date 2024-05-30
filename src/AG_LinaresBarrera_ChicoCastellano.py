@@ -3,6 +3,7 @@ import pandas as pd
 import math
 
 from src.Poblacion import Poblacion
+from src.Fitness import Fitness
 from src.Padres import Padres
 from src.Cruce import Cruce
 from src.Mutacion import Mutacion
@@ -35,7 +36,8 @@ class AG:
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
-        fitness_poblacion_inicial = self.__fitness_poblacion(datos, poblacion_inicial)
+        fitness_p_i = Fitness(datos, poblacion_inicial, self.nInd)
+        fitness_poblacion_inicial = fitness_p_i.fitness_poblacion()
         
         # generamos los padres de la población inicial
         k = 3
@@ -56,21 +58,22 @@ class AG:
         poblacion_a_iterar = hijos_mutados
         tasa_elitismo = 0.2
 
+
         # --------------------------------------------------------------------------------------
         # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
         for i in range(0, self.maxIter):
             # fitness de la población a iterar
-            fitness_hijos_mutados = self.__fitness_poblacion(datos, poblacion_a_iterar)
+            fitness_h_m = Fitness(datos, poblacion_a_iterar, self.nInd)
+            fitness_hijos_mutados = fitness_h_m.fitness_poblacion()
 
             # trabajamos para obtener la nueva generación
             # elegimos los mejores individuos (20%) de la población actual (elitismo)
             numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
             indices_mejores_individuos = np.argsort(fitness_hijos_mutados)[:numero_individuos_elitismo]
             mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * nAtrib + 1))
-            for i in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
-                mejores_individuos[i] = poblacion_a_iterar[indices_mejores_individuos[i]]
+            for j in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
+                mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
             
-
             # generamos los demas individuos de la nueva poblacion mediante cruces y mutaciones de la generación anterior
             # generamos individuos mediante cruces
             cruce = Cruce(mejores_individuos, self.nInd , probabilidad_no_cruce, poblacion_inicial)
@@ -81,7 +84,8 @@ class AG:
             poblacion_mutada = mutacion.mutar()
 
             # obtenemos la nueva generación (nueva poblacion)
-            fitness_nueva_poblacion = self.__fitness_poblacion(datos, poblacion_mutada)
+            fitness_n_p = Fitness(datos, poblacion_mutada, self.nInd)
+            fitness_nueva_poblacion = fitness_n_p.fitness_poblacion()
 
             # generamos los padres de la población inicial
             padres = Padres(fitness_nueva_poblacion, poblacion_mutada, self.nInd)
@@ -103,7 +107,8 @@ class AG:
 
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
-        fitness_poblacion_final = self.__fitness_poblacion(datos, poblacion_a_iterar)
+        fitness_p_f = Fitness(datos, poblacion_a_iterar, self.nInd)
+        fitness_poblacion_final = fitness_p_f.fitness_poblacion()
         mejor_individuo_encontrado = poblacion_a_iterar[np.argmin(fitness_poblacion_final)]
 
 
@@ -118,59 +123,4 @@ class AG:
         # devolvemos la mejor solución encontrada y las predicciones sobre el conjunto de test
         return mejor_individuo_encontrado, y_pred
     
-
-
-    # función para calcular el fitness de la población
-    def __fitness_poblacion(self, datos, poblacion):
-        matrix_errors = np.zeros((datos.shape[0], poblacion.shape[0]))   # matriz de ceros de dimension nDatos x nInd
-
-        # obtenemos para cada ecuacion una lista con el error (diferencia al cuadrado) de cada uno de
-        # los individuos de la población
-        for i in range(0, datos.shape[0]):
-            for j in range(0, poblacion.shape[0]):
-                matrix_errors[i, j] = self.__evalua_individuo(datos.iloc[i], poblacion[j, :])
-        
-        # calculamos el fitness de cada individuo como la suma de sus errores en cada una de las ecuaciones
-        res = np.zeros(self.nInd)
-        for i in range(0, self.nInd):
-            res[i] = np.sum(matrix_errors[:, i])   # sumamos los errores de cada ecuacion para el individuo i
-
-        return res
-
-
-    # función para calcular la diferenca entre el valor real y el valor obtenido para tal individuo
-    # en tal ecuacion
-    def __evalua_individuo(self, valores, parametros):
-        res = 0
-        calculos_prohibidos = False     # para evitar indeterminaciones como 0 elevado a 0
-
-        y_real = valores.iloc[-1]
-        y_aprox = 0
-        
-        # calculamos la y_aprox (la ecuacion) para el individuo
-        for i in range(0, (parametros.size)-1, 2):    # primero calculamos la suma de los terminos 
-            x_i = i // 2        # división entera
-            par_i = i
-            
-            if valores.iloc[x_i] == 0 and parametros[par_i+1] == 0:     # 0 elevado a 0
-                y_aprox += 0
-                calculos_prohibidos = True
-                break
-            elif valores.iloc[x_i] == 0 and parametros[par_i+1] < 0:    # division por 0
-                y_aprox += 0
-                calculos_prohibidos = True
-                break
-            else:                                                       # calculo normal de la ecuación
-                potencia = valores.iloc[x_i] ** parametros[par_i+1]
-                y_aprox += parametros[par_i] * potencia
-
-        y_aprox += parametros[-1]   # sumamos el término independiente
-
-        if calculos_prohibidos:
-            res = 1000000000000
-        else:
-            res = (y_real - y_aprox) ** 2   # calculamos el cuadrado de la diferencia
-
-        return res
-
 

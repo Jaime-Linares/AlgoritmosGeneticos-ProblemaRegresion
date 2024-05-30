@@ -5,7 +5,7 @@ import time
 from src.AG_LinaresBarrera_ChicoCastellano import AG
 
 # Nombre generico del dataset
-nombre_dataset = 'synt1'
+nombre_dataset = 'toy1'
 
 nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
@@ -19,9 +19,9 @@ ag = AG(
 	# semilla para numeros aleatorios
 	seed=123, 
 	# numero de individuos
-	nInd = 10, 
+	nInd = 50, 
 	# maximo de iteraciones
-	maxIter = 50
+	maxIter = 100
 )
 
 # Ejecucion del AG midiendo el tiempo
@@ -46,3 +46,5 @@ print(f'RMSE: {rmse:.4f}')
 
 r2 = r2_score(y_true, y_pred)
 print(f'R2: {r2:.4f}')
+
+
