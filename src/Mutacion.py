@@ -27,9 +27,14 @@ class Mutacion:
                 else:                                                   # si el gen está entre -50 y 50 lo dividimos por 2
                     hijos_mutados[i, gen] = self.hijos[i, gen] / 2
             elif gen in range(1, 2 * self.hijos.shape[1], 2):   # si es posición impar (exponente) excepto el término independiente
-                if self.hijos[i, gen] == 0:             # si el gen es 0 el gen será 1    
-                    hijos_mutados[i, gen] = 1
-                else:                                   # si el gen es 1 el gen será 0
-                    hijos_mutados[i, gen] = 0
-        
+                if self.hijos[i, gen] >-1 and self.hijos[i, gen] <5: # si el exponente está entre -1 y 5, aleatoriamente se suma o resta 1
+                    numero_aleatorio = random.randint(0, 1)
+                    if(numero_aleatorio==0):
+                        hijos_mutados[i, gen] += 1
+                    else:
+                        hijos_mutados[i, gen] -= 1
+                elif self.hijos[i, gen] == -1:  # si el exponente es -1, se le suma 1
+                    hijos_mutados[i, gen] += 1
+                else: # si el exponentes 5, se le resta 1
+                    hijos_mutados[i, gen] -= 1 
         return hijos_mutados

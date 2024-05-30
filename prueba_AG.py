@@ -5,7 +5,7 @@ import time
 from src.AG_LinaresBarrera_ChicoCastellano import AG
 
 # Nombre generico del dataset
-nombre_dataset = 'toy1'
+nombre_dataset = 'synt1'
 
 nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
@@ -19,9 +19,9 @@ ag = AG(
 	# semilla para numeros aleatorios
 	seed=123, 
 	# numero de individuos
-	nInd = 100, 
+	nInd = 10, 
 	# maximo de iteraciones
-	maxIter = 100
+	maxIter = 50
 )
 
 # Ejecucion del AG midiendo el tiempo
@@ -40,9 +40,9 @@ print(f'Predicciones: {y_pred}')
 
 # Cargar valores reales de 'y' en el conjunto de validacion/test 
 #   y calcular RMSE y R2 con las predicciones del AG
-#y_true = pd.read_csv(nombre_dataset_val)['y']
-#rmse = root_mean_squared_error(y_true, y_pred)
-#print(f'RMSE: {rmse:.4f}')
+y_true = pd.read_csv(nombre_dataset_val)['y']
+rmse = root_mean_squared_error(y_true, y_pred)
+print(f'RMSE: {rmse:.4f}')
 
-#r2 = r2_score(y_true, y_pred)
-#print(f'R2: {r2:.4f}')
+r2 = r2_score(y_true, y_pred)
+print(f'R2: {r2:.4f}')
