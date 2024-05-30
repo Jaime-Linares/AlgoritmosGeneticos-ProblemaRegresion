@@ -19,16 +19,16 @@ ag = AG(
 	# semilla para numeros aleatorios
 	seed=123, 
 	# numero de individuos
-	nInd = 10, 
+	nInd = 100, 
 	# maximo de iteraciones
-	maxIter = 3 
+	maxIter = 100
 )
 
 # Ejecucion del AG midiendo el tiempo
-#inicio = time.time()
+inicio = time.time()
 ind, y_pred = ag.run()
-#fin = time.time()
-#print(f'Tiempo ejecucion: {(fin-inicio):.2f}')
+fin = time.time()
+print(f'Tiempo ejecucion: {(fin-inicio):.2f}')
 
 # Imprimir mejor solución encontrada
 print(f'Mejor individuo: {ind}')
