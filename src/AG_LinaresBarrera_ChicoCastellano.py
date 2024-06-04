@@ -66,6 +66,10 @@ class AG:
             fitness_h_m = Fitness(datos, poblacion_a_iterar, self.nInd)
             fitness_hijos_mutados = fitness_h_m.fitness_poblacion()
 
+            # si encontramos un individuo con fitness 0, salimos del bucle porque no podrá haber mejor solución que esa
+            if any(fitness_hijos_mutados == 0): 
+                break
+
             # trabajamos para obtener la nueva generación
             # elegimos los mejores individuos (20%) de la población actual (elitismo)
             numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
@@ -107,7 +111,7 @@ class AG:
         # --------------------------------------------------------------------------------------
         # --------------------------SOLUCIÓN SOBRE EL CONJUNTO DE TEST--------------------------
         datos_prediccion = pd.read_csv(self.datos_test, na_values=0)
-        prediccion = Prediccion(datos_prediccion ,mejor_individuo_encontrado)
+        prediccion = Prediccion(datos_prediccion, mejor_individuo_encontrado)
         y_pred = prediccion.predecir()  
 
 
