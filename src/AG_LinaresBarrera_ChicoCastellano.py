@@ -13,12 +13,14 @@ from src.Prediccion import Prediccion
 class AG:
 
     # constructor
-    def __init__(self, datos_train, datos_test, seed, nInd, maxIter):
+    def __init__(self, datos_train, datos_test, seed, nInd, maxIter,verbose,method):
         self.datos_train = datos_train
         self.datos_test = datos_test
         self.seed = seed
         self.nInd = nInd
         self.maxIter = maxIter
+        self.verbose = verbose
+        self.method = method
 
 
 
@@ -32,7 +34,7 @@ class AG:
         nAtrib = datos.shape[1]-1      # nAtributos = nColumnas - 1
 
         # inicializar población
-        poblacion = Poblacion(self.nInd, nAtrib)   
+        poblacion = Poblacion(self.nInd, nAtrib, self.verbose,self.method)
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
@@ -40,7 +42,7 @@ class AG:
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion()
         
         # generamos los padres de la población inicial
-        k = 3
+        k=2
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
@@ -66,10 +68,6 @@ class AG:
             fitness_h_m = Fitness(datos, poblacion_a_iterar, self.nInd)
             fitness_hijos_mutados = fitness_h_m.fitness_poblacion()
 
-            # si encontramos un individuo con fitness 0, salimos del bucle porque no podrá haber mejor solución que esa
-            if any(fitness_hijos_mutados == 0): 
-                break
-
             # trabajamos para obtener la nueva generación
             # elegimos los mejores individuos (20%) de la población actual (elitismo)
             numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
@@ -77,6 +75,9 @@ class AG:
             mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * nAtrib + 1))
             for j in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
+                
+            if(self.verbose):
+               print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]}")
             
             # generamos los demas individuos de la nueva poblacion mediante torneo de la población anterior
             numIndivGenerar = self.nInd - numero_individuos_elitismo
