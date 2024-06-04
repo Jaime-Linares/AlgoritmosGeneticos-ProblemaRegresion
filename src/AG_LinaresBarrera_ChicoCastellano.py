@@ -43,7 +43,7 @@ class AG:
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
         
         # generamos los padres de la población inicial
-        k=2
+        k = 3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 

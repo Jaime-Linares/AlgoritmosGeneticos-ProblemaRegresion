@@ -17,15 +17,15 @@ ag = AG (
 	# datos de validacion/test (para predecir)
 	datos_test = nombre_dataset_val, 
 	# semilla para numeros aleatorios
-	seed=123, 
+	seed = 123, 
 	# numero de individuos
 	nInd = 50, 
 	# maximo de iteraciones
 	maxIter = 100,
 	#Verbose
-	verbose= True,
-	#Metodo de población inicial: ("seeded","diverse","default")
-	method= "seeded"
+	verbose = False,
+	#Metodo de población inicial: ("seeded", "diverse", "default")
+	method = "seeded"
 )
 
 # Ejecucion del AG midiendo el tiempo

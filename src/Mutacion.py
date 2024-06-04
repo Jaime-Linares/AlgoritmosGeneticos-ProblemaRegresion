@@ -15,18 +15,15 @@ class Mutacion:
 
         # elegimos el numero de individuos que mutarán y cuales van a ser
         numero_mutaciones = math.ceil(self.probabilidad * self.hijos.shape[0])
-        indices_aleatorios = random.sample(range(0, self.hijos.shape[0]), numero_mutaciones)
+        indices_aleatorios = random.sample(range(0, self.hijos.shape[0]), numero_mutaciones)   
         
-        #Para cada individuo se mutará un número de genes aleatorios que van desde 1 hasta el 10% del total de genes de individuo
-        
-        
-
         # mutamos los individuos seleccionados
         for i in indices_aleatorios:
-            num_genes_mutar= random.randint(1, math.ceil(self.hijos.shape[1]*0.1))
-            j=0
+            # para cada individuo se mutará un número de genes aleatorios que van desde 1 hasta el 10% del total de genes de individuo
+            num_genes_mutar = random.randint(1, math.ceil(self.hijos.shape[1] * 0.1))
+            j = 0
             while j <= num_genes_mutar:
-                j+=1
+                j += 1
                 gen = random.randint(0, self.hijos.shape[1]-1)      # elegimos el gen que mutará
 
                 # si es una constante o el término independiente, cambiamos el valor por otro valor random entre -100 y 100
