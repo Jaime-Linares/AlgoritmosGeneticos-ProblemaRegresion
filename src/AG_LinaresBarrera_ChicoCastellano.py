@@ -12,7 +12,7 @@ from src.Prediccion import Prediccion
 
 class AG:
 
-    # contructor
+    # constructor
     def __init__(self, datos_train, datos_test, seed, nInd, maxIter):
         self.datos_train = datos_train
         self.datos_test = datos_test
@@ -46,7 +46,7 @@ class AG:
 
         # generamos los hijos cruzando los padres
         probabilidad_no_cruce = 0.2
-        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce, None)
+        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce)
         hijos_cruzados = cruce.cruzar()
 
         # generamos los hijos mutando los hijos cruzados
@@ -74,35 +74,27 @@ class AG:
             for j in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
             
-            # generamos los demas individuos de la nueva poblacion mediante cruces y mutaciones de la generación anterior
-            # generamos individuos mediante cruces
-            cruce = Cruce(mejores_individuos, self.nInd , probabilidad_no_cruce, poblacion_inicial)
-            poblacion_cruzada = cruce.cruzar()
+            # generamos los demas individuos de la nueva poblacion mediante torneo de la población anterior
+            numIndivGenerar = self.nInd - numero_individuos_elitismo
+            completamos_generacion = Padres(fitness_hijos_mutados, poblacion_a_iterar, numIndivGenerar)
+            otra_parte_generacion_falta_eliminar = completamos_generacion.seleccion_padres_por_torneo(k)
+            otra_parte_generacion = otra_parte_generacion_falta_eliminar[:numIndivGenerar]
 
-            # generamos individuos mediante mutaciones
-            mutacion = Mutacion(poblacion_cruzada, probabilidad_mutacion)
-            poblacion_mutada = mutacion.mutar()
-
-            # obtenemos la nueva generación (nueva poblacion)
-            fitness_n_p = Fitness(datos, poblacion_mutada, self.nInd)
-            fitness_nueva_poblacion = fitness_n_p.fitness_poblacion()
-
-            # generamos los padres de la población inicial
-            padres = Padres(fitness_nueva_poblacion, poblacion_mutada, self.nInd)
-            seleccion_padres = padres.seleccion_padres_por_torneo(k)
+            # unimos los dos grupos de individuos (los mejores y los seleccionados por torneo para rellenar la nueva población)
+            seleccion_padres1 = np.concatenate((mejores_individuos, otra_parte_generacion))
 
             # generamos los hijos cruzando los padres
             probabilidad_no_cruce = 0.2
-            cruce1 = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce, None)
+            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce)
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados
             probabilidad_mutacion = 0.1
-            hijos = Mutacion(hijos_cruzados, probabilidad_mutacion)
-            hijos_mutados = hijos.mutar()
+            hijos1 = Mutacion(hijos_cruzados, probabilidad_mutacion)
+            hijos_mutados1 = hijos1.mutar()
 
             # poblacion a iterar
-            poblacion_a_iterar = hijos_mutados
+            poblacion_a_iterar = hijos_mutados1
 
 
         # --------------------------------------------------------------------------------------

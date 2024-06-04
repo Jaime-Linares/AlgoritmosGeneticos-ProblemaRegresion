@@ -4,16 +4,16 @@ import random
 
 class Padres:
 
-    def __init__(self, fitness, individuos, nInd):
+    def __init__(self, fitness, individuos, numIndividuos):
             self.fitness = fitness
             self.individuos = individuos
-            self.nInd = nInd
+            self.numIndividuos = numIndividuos
             
     
     def seleccion_padres_por_torneo(self, k):
         padres = np.empty_like(self.individuos)
 
-        for i in range(0, self.nInd):
+        for i in range(0, self.numIndividuos):
             # escogemos tres individuos aleatorios
             indices_aleatorios = random.sample(range(0, self.individuos.shape[0]), k)
             # obtenemos sus fitness
