@@ -36,8 +36,9 @@ class AG:
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
+        dicc_fitness = {}
         fitness_p_i = Fitness(datos, poblacion_inicial, self.nInd)
-        fitness_poblacion_inicial = fitness_p_i.fitness_poblacion()
+        fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
         
         # generamos los padres de la población inicial
         k = 3
@@ -64,7 +65,7 @@ class AG:
         for i in range(0, self.maxIter):
             # fitness de la población a iterar
             fitness_h_m = Fitness(datos, poblacion_a_iterar, self.nInd)
-            fitness_hijos_mutados = fitness_h_m.fitness_poblacion()
+            fitness_hijos_mutados = fitness_h_m.fitness_poblacion(dicc_fitness)
 
             # si encontramos un individuo con fitness 0, salimos del bucle porque no podrá haber mejor solución que esa
             if any(fitness_hijos_mutados == 0): 
@@ -104,7 +105,7 @@ class AG:
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
         fitness_p_f = Fitness(datos, poblacion_a_iterar, self.nInd)
-        fitness_poblacion_final = fitness_p_f.fitness_poblacion()
+        fitness_poblacion_final = fitness_p_f.fitness_poblacion(dicc_fitness)
         mejor_individuo_encontrado = poblacion_a_iterar[np.argmin(fitness_poblacion_final)]
 
 

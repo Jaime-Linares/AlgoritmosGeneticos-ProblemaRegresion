@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 
 class Fitness:
@@ -9,14 +10,22 @@ class Fitness:
 
 
     # función para calcular el fitness de la población
-    def fitness_poblacion(self):
+    def fitness_poblacion(self, dicc_fitness):
         matrix_errors = np.zeros((self.datos.shape[0], self.poblacion.shape[0]))   # matriz de ceros de dimension nDatos x nInd
 
         # obtenemos para cada ecuacion una lista con el error (diferencia al cuadrado) de cada uno de
-        # los individuos de la población
+        # los individuos de la población, si ya lo habiamos calculado lo obtenemos de dicc_fitness
         for i in range(0, self.datos.shape[0]):
             for j in range(0, self.poblacion.shape[0]):
-                matrix_errors[i, j] = self.__evalua_individuo(self.datos.iloc[i], self.poblacion[j, :])
+                individuo = self.poblacion[j, :]
+                ecuacion = self.datos.iloc[i]
+                clave = (tuple(individuo), tuple(ecuacion))
+                if clave in dicc_fitness:
+                    error = dicc_fitness[clave]
+                else:
+                    error = self.__evalua_individuo(ecuacion, individuo)
+                    dicc_fitness[clave] = error
+                matrix_errors[i, j] = error
         
         # calculamos el fitness de cada individuo como la suma de sus errores en cada una de las ecuaciones
         res = np.zeros(self.nInd)
