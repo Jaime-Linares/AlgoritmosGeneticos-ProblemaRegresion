@@ -11,7 +11,7 @@ nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
 
 
-ag = AG(
+ag = AG (
 	# datos de entrenamiento (para el proceso del AG)
 	datos_train = nombre_dataset_train, 
 	# datos de validacion/test (para predecir)
@@ -21,7 +21,11 @@ ag = AG(
 	# numero de individuos
 	nInd = 50, 
 	# maximo de iteraciones
-	maxIter = 100
+	maxIter = 100,
+	#Verbose
+	verbose= True,
+	#Metodo de población inicial: ("seeded","diverse","default")
+	method= "seeded"
 )
 
 # Ejecucion del AG midiendo el tiempo
