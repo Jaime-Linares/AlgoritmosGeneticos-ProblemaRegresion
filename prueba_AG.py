@@ -23,9 +23,9 @@ ag = AG (
 	# maximo de iteraciones
 	maxIter = 100,
 	#Verbose
-	verbose = False,
+	verbose = True,
 	#Metodo de población inicial: ("seeded", "diverse", "default")
-	method = "seeded"
+	method = "default"
 )
 
 # Ejecucion del AG midiendo el tiempo

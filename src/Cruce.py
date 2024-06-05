@@ -5,14 +5,19 @@ import math
 
 class Cruce:
 
-    def __init__(self, padres, numero_individuos, probabilidad_no_cruce):
+    def __init__(self, padres, numero_individuos, probabilidad_no_cruce,fitness):
         self.padres = padres
         self.numero_individuos= numero_individuos
         self.probabilidad_no_cruce = probabilidad_no_cruce
+        self.fitness = fitness
            
     
     def cruzar(self):
         hijos = np.empty_like(self.padres)
+        
+        mejor_individuo_index = np.argmin(self.fitness)
+        mejor_individuo = self.padres[mejor_individuo_index]
+        hijos[0] = mejor_individuo
             
         # primero seleccionamos los individuos que van a pasar sin cruces, es decir, pasan tal cual:
         # seleccionamos el 20% aleatoriamente

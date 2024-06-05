@@ -34,7 +34,7 @@ class AG:
         nAtrib = datos.shape[1]-1      # nAtributos = nColumnas - 1
 
         # inicializar población
-        poblacion = Poblacion(self.nInd, nAtrib, self.verbose,self.method)
+        poblacion = Poblacion(self.nInd, nAtrib, self.verbose,self.method, self.datos_train)
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
@@ -49,7 +49,7 @@ class AG:
 
         # generamos los hijos cruzando los padres
         probabilidad_no_cruce = 0.2
-        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce)
+        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial)
         hijos_cruzados = cruce.cruzar()
 
         # generamos los hijos mutando los hijos cruzados
@@ -90,7 +90,7 @@ class AG:
 
             # generamos los hijos cruzando los padres
             probabilidad_no_cruce = 0.2
-            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce)
+            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce,fitness_hijos_mutados)
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados

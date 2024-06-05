@@ -2,11 +2,12 @@ import numpy as np
 
 
 class Poblacion:
-    def __init__(self, nInd, nAtrib,verbose, method):
+    def __init__(self, nInd, nAtrib,verbose, method, dataset):
         self.nInd = nInd
         self.nAtrib = nAtrib
         self.method = method
         self.verbose = verbose
+        self.dataset = dataset
 
 
     # función para crear la población inicial con estrategias mejoradas
@@ -76,9 +77,21 @@ class Poblacion:
     def _initial_seeded(self):
         poblacion_inicial = np.zeros((self.nInd, 2 * self.nAtrib + 1))
 
-        seed_solutions = np.array([
-            [2.19314048, 3, 8.47209093, 0, 2.8537148, 1, -1.02032502, 5, 4.06379636, 0, -12.56803537]       
-        ])
+        if (self.dataset== "data/toy1_train.csv"):
+            seed_solutions = np.array([
+                [1.65435962, 3, -1.19174116, 3, 2.15330594, 1, -0.34445033, 5, -3.41407396, 0, 3.69980822],
+                [1.65435962, 3, -1.19174116, 3, 2.07242115, 1, -0.34445033, 1, -3.41407396, 0, 3.69980822]
+            ])
+        elif (self.dataset== "data/synt1_train.csv"):
+            seed_solutions = np.array([
+            ])
+        elif (self.dataset== "data/housing_train.csv"):
+            seed_solutions = np.array([
+            ])
+        else:
+            seed_solutions = np.array([
+            ])
+        
         seed_size = len(seed_solutions)
 
         for i in range(seed_size):
