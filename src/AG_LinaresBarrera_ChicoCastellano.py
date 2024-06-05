@@ -17,10 +17,10 @@ class AG:
         self.datos_train = datos_train
         self.datos_test = datos_test
         self.seed = seed
-        self.nInd = num_ind
-        self.maxIter = max_iter
+        self.num_ind = num_ind
+        self.max_iter = max_iter
         self.verbose = verbose
-        self.method = population_method
+        self.population_method = population_method
         self.crossover_method= crossover_method
 
 
@@ -32,33 +32,33 @@ class AG:
         # --------------------------------------------------------------------------------------
         # ---------------DATOS DE ENTRENAMIENTO Y PRIMERA ITERACIÓN DEL ALGORITMO---------------
         datos = pd.read_csv(self.datos_train, na_values=0)     
-        nAtrib = datos.shape[1]-1      # nAtributos = nColumnas - 1
+        num_atrib = datos.shape[1]-1      # nAtributos = nColumnas - 1
 
         # inicializar población
-        poblacion = Poblacion(self.nInd, nAtrib, self.verbose,self.method, self.datos_train)
+        poblacion = Poblacion(self.num_ind, num_atrib, self.verbose, self.population_method, self.datos_train)
         poblacion_inicial = poblacion.initial()
 
         # fitness de la población inicial
         dicc_fitness = {}
-        fitness_p_i = Fitness(datos, poblacion_inicial, self.nInd)
+        fitness_p_i = Fitness(datos, poblacion_inicial, self.num_ind)
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
         
         # generamos los padres de la población inicial
         k = 3
-        padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
+        padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.num_ind)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
         # generamos los hijos cruzando los padres
-        
         probabilidad_no_cruce = 0.2
-        marca=0
-        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial,self.crossover_method,marca,self.verbose)
+        mark=0
+        cruce = Cruce(seleccion_padres, self.num_ind, probabilidad_no_cruce, fitness_poblacion_inicial, self.crossover_method, mark,self.verbose)
         hijos_cruzados = cruce.cruzar()
-        marca=1
-
+        mark=1
+        
         # generamos los hijos mutando los hijos cruzados
+        generaciones_sin_mejora=0
         mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial)
-        hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial))
+        hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial), generaciones_sin_mejora)
 
         # poblacion a iterar
         poblacion_a_iterar = hijos_mutados
@@ -67,16 +67,16 @@ class AG:
 
         # --------------------------------------------------------------------------------------
         # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
-        for i in range(0, self.maxIter):
+        for i in range(0, self.max_iter):
             # fitness de la población a iterar
-            fitness_h_m = Fitness(datos, poblacion_a_iterar, self.nInd)
+            fitness_h_m = Fitness(datos, poblacion_a_iterar, self.num_ind)
             fitness_hijos_mutados = fitness_h_m.fitness_poblacion(dicc_fitness)
 
             # trabajamos para obtener la nueva generación
             # elegimos los mejores individuos (20%) de la población actual (elitismo)
-            numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
+            numero_individuos_elitismo = math.ceil(tasa_elitismo * self.num_ind)
             indices_mejores_individuos = np.argsort(fitness_hijos_mutados)[:numero_individuos_elitismo]
-            mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * nAtrib + 1))
+            mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * num_atrib + 1))
             for j in range(0, indices_mejores_individuos.size):                 # guardamos los mejores individuos para la nueva poblacion
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
                 
@@ -84,22 +84,22 @@ class AG:
                print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]} con fitness: {fitness_hijos_mutados[np.argmin(fitness_hijos_mutados)]} ")
             
             # generamos los demas individuos de la nueva poblacion mediante torneo de la población anterior
-            numIndivGenerar = self.nInd - numero_individuos_elitismo
-            completamos_generacion = Padres(fitness_hijos_mutados, poblacion_a_iterar, numIndivGenerar)
+            num_ind_generar = self.num_ind - numero_individuos_elitismo
+            completamos_generacion = Padres(fitness_hijos_mutados, poblacion_a_iterar, num_ind_generar)
             otra_parte_generacion_falta_eliminar = completamos_generacion.seleccion_padres_por_torneo(k)
-            otra_parte_generacion = otra_parte_generacion_falta_eliminar[:numIndivGenerar]
+            otra_parte_generacion = otra_parte_generacion_falta_eliminar[:num_ind_generar]
 
             # unimos los dos grupos de individuos (los mejores y los seleccionados por torneo para rellenar la nueva población)
             seleccion_padres1 = np.concatenate((mejores_individuos, otra_parte_generacion))
 
             # generamos los hijos cruzando los padres
             probabilidad_no_cruce = 0.2
-            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce,fitness_hijos_mutados,self.crossover_method,marca,self.verbose)
+            cruce1 = Cruce(seleccion_padres1, self.num_ind, probabilidad_no_cruce,fitness_hijos_mutados,self.crossover_method,mark,self.verbose)
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados
             mutacion1 = Mutacion(hijos_cruzados, fitness_poblacion_inicial)
-            hijos_mutados1 = mutacion1.mutar(np.min(fitness_hijos_mutados))
+            hijos_mutados1 = mutacion1.mutar(np.min(fitness_hijos_mutados), generaciones_sin_mejora)
 
             # poblacion a iterar
             poblacion_a_iterar = hijos_mutados1
@@ -107,7 +107,7 @@ class AG:
 
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
-        fitness_p_f = Fitness(datos, poblacion_a_iterar, self.nInd)
+        fitness_p_f = Fitness(datos, poblacion_a_iterar, self.num_ind)
         fitness_poblacion_final = fitness_p_f.fitness_poblacion(dicc_fitness)
         mejor_individuo_encontrado = poblacion_a_iterar[np.argmin(fitness_poblacion_final)]
 

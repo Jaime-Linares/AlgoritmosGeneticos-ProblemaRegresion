@@ -5,27 +5,27 @@ import math
 class Cruce:
 
 
-    def __init__(self, padres, numero_individuos, probabilidad_no_cruce, fitness, metodo, marca, verbose):
+    def __init__(self, padres, num_ind, probabilidad_no_cruce, fitness, crossover_method, mark, verbose):
 
         self.padres = padres
-        self.numero_individuos = numero_individuos
+        self.num_ind = num_ind
         self.probabilidad_no_cruce = probabilidad_no_cruce
         self.fitness = fitness
-        self.metodo = metodo
-        self.marca = marca
+        self.metodo = crossover_method
+        self.mark = mark
         self.verbose= verbose
 
     def cruzar(self):
         if self.metodo == "dos_puntos":
-            if(self.verbose and self.marca==0):
+            if(self.verbose and self.mark==0):
                 print("Metodo de cruce: Dos puntos")
             return self._cruce_dos_puntos()
         elif self.metodo == "uniforme":
-            if(self.verbose and self.marca==0):
+            if(self.verbose and self.mark==0):
                 print("Metodo de cruce: Uniforme")
             return self._cruce_uniforme()
         else:
-            if(self.verbose and self.marca==0):
+            if(self.verbose and self.mark==0):
                 print("Metodo de cruce: Default")
             return self._cruce_uniforme()
 
@@ -35,7 +35,7 @@ class Cruce:
         [hijos,numero]= self._individuos_no_modificados()
         
         #Cruce de dos puntos
-        while numero < self.numero_individuos:
+        while numero < self.num_ind:
             
             #Seleccionamos dos indiviuos al azar
             indices = random.sample(range(0, self.padres.shape[0]), 2)
@@ -61,7 +61,7 @@ class Cruce:
         [hijos,numero]= self._individuos_no_modificados()
         
         # Cruce uniforme
-        while numero < self.numero_individuos:
+        while numero < self.num_ind:
             
             #Seleccionamos dos indiviuos al azar
             indices = random.sample(range(0, self.padres.shape[0]), 2)
@@ -84,7 +84,7 @@ class Cruce:
         [hijos,numero]= self._individuos_no_modificados()
             
         #Para el resto de individuos cruzamos aleatoriamente dos de los padres
-        while numero < self.numero_individuos:
+        while numero < self.num_ind:
 
             #Seleccionamos dos padres aletoriamente
             indices = random.sample(range(0, self.padres.shape[0]), 2)
@@ -111,7 +111,7 @@ class Cruce:
         hijos[0] = mejor_individuo
         
         #Seleccionamos los individuos que van a pasar sin cruces (-1 por el individuo que ya ha pasado)
-        numero = math.ceil(self.numero_individuos * self.probabilidad_no_cruce) - 1
+        numero = math.ceil(self.num_ind * self.probabilidad_no_cruce) - 1
         indices_sin_cruce = random.sample(range(0, self.padres.shape[0]), numero)
         
         #Añadimos el que hemos restado antes para que los métodos funcionen correctamente

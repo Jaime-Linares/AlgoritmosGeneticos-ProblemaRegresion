@@ -4,29 +4,29 @@ import math
 
 class Mutacion:
 
-    def __init__(self, hijos, fitness, probabilidad_baja=0.1, probabilidad_alta=0.3, umbral_estancamiento=5):
+    def __init__(self, hijos, fitness, probabilidad_baja=0.1, probabilidad_alta=0.4, umbral_estancamiento=5):
         self.hijos = hijos
         self.probabilidad_baja = probabilidad_baja
         self.probabilidad_alta = probabilidad_alta
         self.probabilidad_actual = probabilidad_baja
         self.umbral_estancamiento = umbral_estancamiento
-        self.generaciones_sin_mejora = 0
         self.mejor_fitness_anterior = None
         self.fitness = fitness
 
 
-    def mutar(self, mejor_fitness_actual):
+    def mutar(self, mejor_fitness_actual, generaciones_sin_mejora):
+        
         # comprobamos si la anterior generación el fitness mejoró o es la 1 iteración
         if self.mejor_fitness_anterior is None or mejor_fitness_actual < self.mejor_fitness_anterior:
             # si es así, establecemos la probabilidad de mutación en baja, y reseteamos el contador de poblaciones sin mejora
-            self.generaciones_sin_mejora = 0
+            generaciones_sin_mejora = 0
             self.probabilidad_actual = self.probabilidad_baja
             self.mejor_fitness_anterior = mejor_fitness_actual
         else:
             # si no es así, aumentamos el contador de poblaciones sin mejora, y cuando este supere un umbral,
             # se cambiará la probabilidad de mutación a una mayor para evitar estancamientos
-            self.generaciones_sin_mejora += 1
-            if self.generaciones_sin_mejora >= self.umbral_estancamiento:
+            generaciones_sin_mejora += 1
+            if generaciones_sin_mejora >= self.umbral_estancamiento:
                 self.probabilidad_actual = self.probabilidad_alta
 
         # elegimos el número de individuos que mutarán y cuáles van a ser
@@ -59,9 +59,8 @@ class Mutacion:
                             hijos_mutados[i, gen] -= 1
                     elif self.hijos[i, gen] == -1:                          # si el exponente es -1, se le suma 1
                         hijos_mutados[i, gen] += 1
-                    elif self.hijos[i, gen] == 5:                           # si el exponente es 5, se le resta 1
+                    else:                           # si el exponente es 5, se le resta 1
                         hijos_mutados[i, gen] -= 1
-                    else:
-                        hijos_mutados[i, gen] = 2
+                    
 
         return hijos_mutados
