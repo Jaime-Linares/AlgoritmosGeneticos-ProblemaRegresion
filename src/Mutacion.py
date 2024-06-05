@@ -34,7 +34,7 @@ class Mutacion:
         numero_mutaciones = math.ceil(self.probabilidad_actual * self.hijos.shape[0])
         
         # aseguramos que el mejor individuo no se pueda mutar
-        mejor_individuo = np.argsort(self.fitness)[0]
+        mejor_individuo= 0
         indices_aleatorios = [i for i in range(self.hijos.shape[0]) if i != mejor_individuo]
         indices_seleccionados = random.sample(indices_aleatorios, numero_mutaciones)
 

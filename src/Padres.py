@@ -13,8 +13,7 @@ class Padres:
         padres = np.empty_like(self.individuos)
 
         # identificar el mejor individuo
-        mejor_individuo_index = np.argmin(self.fitness)
-        mejor_individuo = self.individuos[mejor_individuo_index]
+        mejor_individuo = self.individuos[np.argmin(self.fitness)]
 
         # garantizar que el mejor individuo pasa como padre
         padres[0] = mejor_individuo

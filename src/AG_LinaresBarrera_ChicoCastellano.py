@@ -13,12 +13,12 @@ from src.Prediccion import Prediccion
 class AG:
 
     # constructor
-    def __init__(self, datos_train, datos_test, seed, nInd, maxIter,verbose,population_method, crossover_method):
+    def __init__(self, datos_train, datos_test, seed, num_ind, max_iter, verbose, population_method, crossover_method):
         self.datos_train = datos_train
         self.datos_test = datos_test
         self.seed = seed
-        self.nInd = nInd
-        self.maxIter = maxIter
+        self.nInd = num_ind
+        self.maxIter = max_iter
         self.verbose = verbose
         self.method = population_method
         self.crossover_method= crossover_method
@@ -53,7 +53,6 @@ class AG:
         probabilidad_no_cruce = 0.2
         marca=0
         cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial,self.crossover_method,marca,self.verbose)
-
         hijos_cruzados = cruce.cruzar()
         marca=1
 
@@ -82,7 +81,7 @@ class AG:
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
                 
             if(self.verbose):
-               print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]} con fitness: {fitness_hijos_mutados[indices_mejores_individuos[0]]} ")
+               print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]} con fitness: {fitness_hijos_mutados[np.argmin(fitness_hijos_mutados)]} ")
             
             # generamos los demas individuos de la nueva poblacion mediante torneo de la población anterior
             numIndivGenerar = self.nInd - numero_individuos_elitismo
