@@ -22,11 +22,12 @@ ag = AG (
 	nInd = 50, 
 	# maximo de iteraciones
 	maxIter = 100,
-	#Verbose
+	# verbose: explica en cada iteración mejor individuo y su fitness
 	verbose = True,
-	#Metodo de población inicial: ("seeded", "diverse", "default")
+	# método de población inicial: ("seeded", "diverse", "default")
 	method = "default"
 )
+
 
 # Ejecucion del AG midiendo el tiempo
 inicio = time.time()

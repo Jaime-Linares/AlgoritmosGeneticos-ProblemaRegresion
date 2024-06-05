@@ -15,18 +15,19 @@ class Poblacion:
         if self.method == "diverse":
             if(self.verbose):
                 print("Metodo de generacion de poblacion inicial: diverse")
-            return self._initial_diverse()
+            return self.__initial_diverse()
         elif self.method == "seeded":
             if(self.verbose):
                 print("Metodo de generacion de poblacion inicial: seeded")
-            return self._initial_seeded()
+            return self.__initial_seeded()
         else:
             if(self.verbose):
                 print("Metodo de generacion de poblacion inicial: default")
-            return self._initial_default()
+            return self.__initial_default()
 
 
-    def _initial_default(self):
+    # método para generar la población inicial por defecto
+    def __initial_default(self):
         poblacion_inicial = np.zeros((self.nInd, 2 * self.nAtrib + 1))
 
         # números decimales aleatorios para las posiciones pares entre -50 y 50
@@ -43,7 +44,8 @@ class Poblacion:
         return poblacion_inicial
 
 
-    def _initial_diverse(self):
+    # método para generar la población inicial con diversidad
+    def __initial_diverse(self):
         poblacion_inicial = np.zeros((self.nInd, 2 * self.nAtrib + 1))
         
         # número de clusters (grupos de soluciones)
@@ -74,7 +76,8 @@ class Poblacion:
         return poblacion_inicial
 
 
-    def _initial_seeded(self):
+    # método para generar la población inicial con semillas
+    def __initial_seeded(self):
         poblacion_inicial = np.zeros((self.nInd, 2 * self.nAtrib + 1))
 
         if (self.dataset== "data/toy1_train.csv"):
@@ -84,12 +87,15 @@ class Poblacion:
             ])
         elif (self.dataset== "data/synt1_train.csv"):
             seed_solutions = np.array([
+
             ])
         elif (self.dataset== "data/housing_train.csv"):
             seed_solutions = np.array([
+
             ])
         else:
             seed_solutions = np.array([
+                
             ])
         
         seed_size = len(seed_solutions)

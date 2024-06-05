@@ -43,17 +43,17 @@ class AG:
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
         
         # generamos los padres de la población inicial
-        k=3
+        k = 3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
         # generamos los hijos cruzando los padres
         probabilidad_no_cruce = 0.2
-        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial)
+        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce, fitness_poblacion_inicial)
         hijos_cruzados = cruce.cruzar()
 
         # generamos los hijos mutando los hijos cruzados
-        mutacion = Mutacion(hijos_cruzados,fitness_poblacion_inicial)
+        mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial)
         hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial))
 
         # poblacion a iterar
@@ -73,7 +73,7 @@ class AG:
             numero_individuos_elitismo = math.ceil(tasa_elitismo * self.nInd)
             indices_mejores_individuos = np.argsort(fitness_hijos_mutados)[:numero_individuos_elitismo]
             mejores_individuos = np.zeros((numero_individuos_elitismo, 2 * nAtrib + 1))
-            for j in range(0, indices_mejores_individuos.size):                    # guardamos los mejores individuos para la nueva poblacion
+            for j in range(0, indices_mejores_individuos.size):                 # guardamos los mejores individuos para la nueva poblacion
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
                 
             if(self.verbose):
@@ -90,12 +90,12 @@ class AG:
 
             # generamos los hijos cruzando los padres
             probabilidad_no_cruce = 0.2
-            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce,fitness_hijos_mutados)
+            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce, fitness_hijos_mutados)
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados
-            mutacion = Mutacion(hijos_cruzados,fitness_poblacion_inicial)
-            hijos_mutados1 = mutacion.mutar(np.min(fitness_hijos_mutados))
+            mutacion1 = Mutacion(hijos_cruzados, fitness_poblacion_inicial)
+            hijos_mutados1 = mutacion1.mutar(np.min(fitness_hijos_mutados))
 
             # poblacion a iterar
             poblacion_a_iterar = hijos_mutados1

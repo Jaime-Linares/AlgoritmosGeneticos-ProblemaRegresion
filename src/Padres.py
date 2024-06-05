@@ -8,17 +8,18 @@ class Padres:
         self.individuos = individuos
         self.numIndividuos = numIndividuos
 
+
     def seleccion_padres_por_torneo(self, k):
         padres = np.empty_like(self.individuos)
 
-        # Identificar el mejor individuo
+        # identificar el mejor individuo
         mejor_individuo_index = np.argmin(self.fitness)
         mejor_individuo = self.individuos[mejor_individuo_index]
 
-        # Garantizar que el mejor individuo pasa como padre
+        # garantizar que el mejor individuo pasa como padre
         padres[0] = mejor_individuo
 
-        # Seleccionar los demás padres usando torneo
+        # seleccionar los demás padres usando torneo
         for i in range(1, self.numIndividuos):
             # escogemos tres individuos aleatorios
             indices_aleatorios = random.sample(range(0, self.individuos.shape[0]), k)
@@ -35,3 +36,5 @@ class Padres:
             padres[i] = indiviudo_mayor_fitness
 
         return padres
+    
+    
