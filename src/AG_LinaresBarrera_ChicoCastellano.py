@@ -43,7 +43,7 @@ class AG:
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
         
         # generamos los padres de la población inicial
-        k = 3
+        k=3
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.nInd)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
@@ -53,9 +53,8 @@ class AG:
         hijos_cruzados = cruce.cruzar()
 
         # generamos los hijos mutando los hijos cruzados
-        probabilidad_mutacion = 0.1
-        hijos = Mutacion(hijos_cruzados, probabilidad_mutacion)
-        hijos_mutados = hijos.mutar()
+        mutacion = Mutacion(hijos_cruzados,fitness_poblacion_inicial)
+        hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial))
 
         # poblacion a iterar
         poblacion_a_iterar = hijos_mutados
@@ -78,7 +77,7 @@ class AG:
                 mejores_individuos[j] = poblacion_a_iterar[indices_mejores_individuos[j]]
                 
             if(self.verbose):
-               print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]}")
+               print(f"El mejor individuo de la poblacion {i} es: {poblacion_a_iterar[indices_mejores_individuos[0]]} con fitness: {fitness_hijos_mutados[indices_mejores_individuos[0]]} ")
             
             # generamos los demas individuos de la nueva poblacion mediante torneo de la población anterior
             numIndivGenerar = self.nInd - numero_individuos_elitismo
@@ -95,9 +94,8 @@ class AG:
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados
-            probabilidad_mutacion = 0.1
-            hijos1 = Mutacion(hijos_cruzados, probabilidad_mutacion)
-            hijos_mutados1 = hijos1.mutar()
+            mutacion = Mutacion(hijos_cruzados,fitness_poblacion_inicial)
+            hijos_mutados1 = mutacion.mutar(np.min(fitness_hijos_mutados))
 
             # poblacion a iterar
             poblacion_a_iterar = hijos_mutados1
