@@ -13,14 +13,15 @@ from src.Prediccion import Prediccion
 class AG:
 
     # constructor
-    def __init__(self, datos_train, datos_test, seed, nInd, maxIter,verbose,method):
+    def __init__(self, datos_train, datos_test, seed, nInd, maxIter,verbose,population_method, crossover_method):
         self.datos_train = datos_train
         self.datos_test = datos_test
         self.seed = seed
         self.nInd = nInd
         self.maxIter = maxIter
         self.verbose = verbose
-        self.method = method
+        self.method = population_method
+        self.crossover_method= crossover_method
 
 
 
@@ -48,9 +49,12 @@ class AG:
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
         # generamos los hijos cruzando los padres
+        
         probabilidad_no_cruce = 0.2
-        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial)
+        marca=0
+        cruce = Cruce(seleccion_padres, self.nInd, probabilidad_no_cruce,fitness_poblacion_inicial,self.crossover_method,marca,self.verbose)
         hijos_cruzados = cruce.cruzar()
+        marca=1
 
         # generamos los hijos mutando los hijos cruzados
         mutacion = Mutacion(hijos_cruzados,fitness_poblacion_inicial)
@@ -90,7 +94,7 @@ class AG:
 
             # generamos los hijos cruzando los padres
             probabilidad_no_cruce = 0.2
-            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce,fitness_hijos_mutados)
+            cruce1 = Cruce(seleccion_padres1, self.nInd, probabilidad_no_cruce,fitness_hijos_mutados,self.crossover_method,marca,self.verbose)
             hijos_cruzados = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados

@@ -19,13 +19,15 @@ ag = AG (
 	# semilla para numeros aleatorios
 	seed = 123, 
 	# numero de individuos
-	nInd = 50, 
+	nInd = 100, 
 	# maximo de iteraciones
 	maxIter = 100,
 	#Verbose
 	verbose = True,
 	#Metodo de población inicial: ("seeded", "diverse", "default")
-	method = "default"
+	population_method = "default",
+	#Metodo de cruzado: ("dos_puntos", "uniforme","default")
+	crossover_method = "basado_en_fitness"
 )
 
 # Ejecucion del AG midiendo el tiempo
