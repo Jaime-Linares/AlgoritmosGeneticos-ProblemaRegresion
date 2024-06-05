@@ -22,13 +22,15 @@ ag = AG (
 	nInd = 100, 
 	# maximo de iteraciones
 	maxIter = 100,
-	#Verbose
+	# verbose: explica en cada iteración mejor individuo y su fitness
 	verbose = True,
 	#Metodo de población inicial: ("seeded", "diverse", "default")
 	population_method = "default",
 	#Metodo de cruzado: ("dos_puntos", "uniforme","default")
 	crossover_method = "basado_en_fitness"
+
 )
+
 
 # Ejecucion del AG midiendo el tiempo
 inicio = time.time()

@@ -4,7 +4,9 @@ import math
 
 class Cruce:
 
+
     def __init__(self, padres, numero_individuos, probabilidad_no_cruce, fitness, metodo,marca,verbose):
+
         self.padres = padres
         self.numero_individuos = numero_individuos
         self.probabilidad_no_cruce = probabilidad_no_cruce
