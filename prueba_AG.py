@@ -4,6 +4,7 @@ import time
 
 from src.AG_LinaresBarrera_ChicoCastellano import AG
 
+
 # Nombre generico del dataset
 nombre_dataset = 'toy1'
 
@@ -19,21 +20,21 @@ ag = AG (
 	# semilla para numeros aleatorios
 	seed = 123, 
 	# numero de individuos
+    # para que funcione correctamente tiene que ser mayor de 3 (selección de padres por torneo es k=3)
 	num_ind = 100, 
 	# maximo de iteraciones
 	max_iter = 100,
 	# verbose: aporta información adicional por consola
 	verbose = True,
-	#Metodo de población inicial: ("seeded", "diverse", "default")
-	#Para que diverse funcione correctamente num_ind debe ser múltiplo de 5
-	population_method = "default",
-	#Metodo de cruzado: ("dos_puntos", "uniforme", "default")
+	# método de población inicial: ("seeded", "diverse", "default")
+    # para que diverse funcione correctamente num_ind debe ser múltiplo de 5
+	population_method = "seeded",
+	# método de cruzado: ("dos_puntos", "uniforme", "default")
 	crossover_method = "dos_puntos"
-
 )
 
 
-# Ejecucion del AG midiendo el tiempo
+# Ejecución del AG midiendo el tiempo
 inicio = time.time()
 ind, y_pred = ag.run()
 fin = time.time()
@@ -48,7 +49,7 @@ print(f'Predicciones: {y_pred}')
 #  [-1.53, 1.49, 2.15, ..., -2.77] # --> Se trata de un ejemplo
 
 # Cargar valores reales de 'y' en el conjunto de validacion/test 
-#   y calcular RMSE y R2 con las predicciones del AG
+# 	y calcular RMSE y R2 con las predicciones del AG
 y_true = pd.read_csv(nombre_dataset_val)['y']
 rmse = root_mean_squared_error(y_true, y_pred)
 print(f'RMSE: {rmse:.4f}')

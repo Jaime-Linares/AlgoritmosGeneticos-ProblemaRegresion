@@ -2,6 +2,7 @@ import numpy as np
 
 
 class Fitness:
+    
     def __init__(self, datos, poblacion, nInd):
         self.datos = datos
         self.poblacion = poblacion

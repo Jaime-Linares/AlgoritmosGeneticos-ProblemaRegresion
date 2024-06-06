@@ -2,6 +2,7 @@ import numpy as np
 
 
 class Poblacion:
+
     def __init__(self, num_ind, num_atrib,verbose, population_method, dataset):
         self.num_ind = num_ind
         self.num_atrib = num_atrib
@@ -10,7 +11,7 @@ class Poblacion:
         self.dataset = dataset
 
 
-    # función para crear la población inicial con estrategias mejoradas
+    # método para elegir el tipo de población inicial que vamos a generar
     def initial(self):
         if self.population_method == "diverse":
             if(self.verbose):
@@ -76,10 +77,12 @@ class Poblacion:
         return poblacion_inicial
 
 
-    # método para generar la población inicial con semillas
+    # método para generar la población inicial con semillas (individuos que sabemos que tienen buen fitness)
     def __initial_seeded(self):
         poblacion_inicial = np.zeros((self.num_ind, 2 * self.num_atrib + 1))
 
+        # según el dataset que estemos utilizando tendremos unas semillas u otras
+        # los tres primeros son para los dataset que se nos proporcionan y el cuarto es por si se prueba con otro dataset
         if (self.dataset== "data/toy1_train.csv"):
             seed_solutions = np.array([
                 [1.65435962, 3, -1.19174116, 3, 2.07242115, 1, -0.34445033, 1, -3.41407396, 0, 3.69980822],
@@ -97,19 +100,22 @@ class Poblacion:
             seed_solutions = np.array([
                 
             ])
-        
-        seed_size = len(seed_solutions)
 
+        # número de semillas a añadir en la población inicial e introducimos las semillas en la población inicial
+        seed_size = len(seed_solutions)
         for i in range(seed_size):
             poblacion_inicial[i] = seed_solutions[i]
 
+        # generamos los demás individuos de la población inicial de la misma forma que lo hemos generado en
+        # el método de población por defecto
         for i in range(seed_size, self.num_ind):     
+            # números decimales aleatorios para las posiciones pares entre -50 y 50
             indices_pares = range(0, 2 * self.num_atrib, 2)
             poblacion_inicial[i, indices_pares] = np.random.uniform(-50, 50, size=(1, self.num_atrib))
-            
+            # números enteros aleatorios para las posiciones impares (excepto la última) entre -1 y 5
             indices_impares = range(1, 2 * self.num_atrib, 2)
             poblacion_inicial[i, indices_impares] = np.random.randint(-1, 5, size=(1, self.num_atrib))
-            
+            # números decimales aleatorio en el rango para la última posición (término independiente) entre -50 y 50
             poblacion_inicial[i, 2 * self.num_atrib] = np.random.uniform(-50, 50)
     
         return poblacion_inicial
