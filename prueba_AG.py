@@ -6,7 +6,7 @@ from src.AG_LinaresBarrera_ChicoCastellano import AG
 
 
 # Nombre generico del dataset
-nombre_dataset = 'synt1'
+nombre_dataset = 'toy1'
 
 nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
@@ -28,9 +28,9 @@ ag = AG (
 	verbose = True,
 	# método de población inicial: ("seeded", "diverse", "default")
     # para que diverse funcione correctamente num_ind debe ser múltiplo de 5
-	population_method = "diverse",
+	population_method = "default",
 	# método de cruzado: ("dos_puntos", "uniforme", "default")
-	crossover_method = "dos_puntos"
+	crossover_method = "uniforme"
 )
 
 
