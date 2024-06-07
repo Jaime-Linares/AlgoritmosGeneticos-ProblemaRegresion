@@ -6,7 +6,7 @@ from src.AG_LinaresBarrera_ChicoCastellano import AG
 
 
 # Nombre generico del dataset
-nombre_dataset = 'toy1'
+nombre_dataset = 'synt1'
 
 nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
@@ -23,12 +23,12 @@ ag = AG (
     # para que funcione correctamente tiene que ser mayor de 3 (selección de padres por torneo es k=3)
 	num_ind = 100, 
 	# maximo de iteraciones
-	max_iter = 100,
+	max_iter = 500,
 	# verbose: aporta información adicional por consola
 	verbose = True,
 	# método de población inicial: ("seeded", "diverse", "default")
     # para que diverse funcione correctamente num_ind debe ser múltiplo de 5
-	population_method = "seeded",
+	population_method = "diverse",
 	# método de cruzado: ("dos_puntos", "uniforme", "default")
 	crossover_method = "dos_puntos"
 )

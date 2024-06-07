@@ -13,11 +13,7 @@ class Fitness:
         
         # Evaluar la población completa
         fitness_values = self.evaluate_population(poblacion_array)
-        
-        # Actualizar el diccionario con los valores de fitness
-        for ind, fitness_value in zip(poblacion_array, fitness_values):
-            dicc_fitness[tuple(ind)] = fitness_value
-        
+        fitness_values = np.where(np.isnan(fitness_values), float('inf'), fitness_values)
         return fitness_values
 
     def evaluate_population(self, population):
