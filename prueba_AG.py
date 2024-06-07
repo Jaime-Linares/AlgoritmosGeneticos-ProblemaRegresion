@@ -19,7 +19,7 @@ ag = AG (
 	# semilla para numeros aleatorios
 	seed = 123, 
 	# numero de individuos
-	num_ind = 100, 
+	num_ind = 50, 
 	# maximo de iteraciones
 	max_iter = 100,
 	# verbose: aporta información adicional por consola
@@ -28,7 +28,7 @@ ag = AG (
 	#Para que diverse funcione correctamente num_ind debe ser múltiplo de 5
 	population_method = "default",
 	#Metodo de cruzado: ("dos_puntos", "uniforme", "default")
-	crossover_method = "dos_puntos"
+	crossover_method = "uniforme"
 
 )
 
