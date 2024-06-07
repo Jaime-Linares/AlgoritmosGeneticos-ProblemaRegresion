@@ -1,13 +1,11 @@
-import numpy as np
-
-
 class Prediccion:   
 
     def __init__(self, datos_prueba, individuo_solucion):
         self.datos_prueba = datos_prueba
         self.individuo_solucion = individuo_solucion
 
-    
+
+    # método que devuelve las predicciones del individuo solución para el dataset de prueba
     def predecir(self):
         prediccion = []
 
@@ -21,7 +19,7 @@ class Prediccion:
                     y_aprox += 1000000000000
                 elif valores.iloc[x_i] == 0 and self.individuo_solucion[par_i+1] < 0:    # division por 0
                     y_aprox += 1000000000000
-                else:                                      # calculo normal de la ecuación
+                else:                                                                    # calculo normal de la ecuación
                     potencia = valores.iloc[x_i] ** self.individuo_solucion[par_i+1]
                     y_aprox += self.individuo_solucion[par_i] * potencia
             y_aprox += self.individuo_solucion[-1]   # sumamos el término independiente

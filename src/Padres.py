@@ -1,12 +1,13 @@
 import numpy as np
 import random
 
+
 class Padres:
 
-    def __init__(self, fitness, individuos, numIndividuos):
+    def __init__(self, fitness, individuos, num_individuos):
         self.fitness = fitness
         self.individuos = individuos
-        self.numIndividuos = numIndividuos
+        self.num_individuos = num_individuos
 
 
     def seleccion_padres_por_torneo(self, k):
@@ -19,7 +20,7 @@ class Padres:
         padres[0] = mejor_individuo
 
         # seleccionar los demás padres usando torneo
-        for i in range(1, self.numIndividuos):
+        for i in range(1, self.num_individuos):
             # escogemos tres individuos aleatorios
             indices_aleatorios = random.sample(range(0, self.individuos.shape[0]), k)
             # obtenemos sus fitness
