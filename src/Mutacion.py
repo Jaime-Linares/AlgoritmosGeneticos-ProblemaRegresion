@@ -5,7 +5,7 @@ import math
 
 class Mutacion:
 
-    def __init__(self, hijos, fitness, probabilidad_baja=0.1, probabilidad_alta=0.4, umbral_estancamiento=5):
+    def __init__(self, hijos, fitness, probabilidad_baja, probabilidad_alta, umbral_estancamiento):
         self.hijos = hijos
         self.fitness = fitness
         self.probabilidad_baja = probabilidad_baja

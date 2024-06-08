@@ -57,7 +57,10 @@ class AG:
         
         # generamos los hijos mutando los hijos cruzados
         generaciones_sin_mejora=0
-        mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial)
+        probabilidad_baja=0.1
+        probabilidad_alta=0.4
+        umbral_estancamiento=5
+        mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial,probabilidad_baja, probabilidad_alta, umbral_estancamiento)
         hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial), generaciones_sin_mejora)
 
         # poblacion a iterar y la tasa de elitismo usada para generar las nuevas generaciones
@@ -98,7 +101,7 @@ class AG:
             hijos_cruzados1 = cruce1.cruzar()
             
             # generamos los hijos mutando los hijos cruzados
-            mutacion1 = Mutacion(hijos_cruzados1, fitness_hijos_mutados)   
+            mutacion1 = Mutacion(hijos_cruzados1, fitness_hijos_mutados,probabilidad_baja, probabilidad_alta, umbral_estancamiento)   
             hijos_mutados1 = mutacion1.mutar(np.min(fitness_hijos_mutados), generaciones_sin_mejora)
 
             # poblacion a iterar
