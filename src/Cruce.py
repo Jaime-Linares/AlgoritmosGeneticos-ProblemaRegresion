@@ -5,11 +5,10 @@ import math
 
 class Cruce:
 
-    def __init__(self, padres, num_ind, probabilidad_no_cruce, fitness, crossover_method, mark, verbose):
+    def __init__(self, padres, num_ind, probabilidad_no_cruce, crossover_method, mark, verbose):
         self.padres = padres
         self.num_ind = num_ind
         self.probabilidad_no_cruce = probabilidad_no_cruce
-        self.fitness = fitness
         self.metodo = crossover_method
         self.mark = mark
         self.verbose= verbose
