@@ -27,7 +27,7 @@ class Cruce:
         else:
             if(self.verbose and self.mark==0):
                 print("Metodo de cruce: default")
-            return self.__cruce_uniforme()
+            return self.__cruce_default()
 
 
     # cruce de dos puntos (seleccionamos dos puntos al azar y cruzamos los padres en esos puntos)
