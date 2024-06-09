@@ -13,7 +13,7 @@ class Fitness:
         # convertir la población a un array de numpy para operaciones vectorizadas
         poblacion_array = np.array(self.poblacion)
         # evaluar la población completa
-        fitness_values = self.evaluate_population(poblacion_array)
+        fitness_values = self.__evaluate_population(poblacion_array)
         # donde no pueda calcularse el fitness (porque es un valor muy grande), asignar un valor muy alto (infinito)
         fitness_values = np.where(np.isnan(fitness_values), float('inf'), fitness_values)
 
@@ -21,7 +21,7 @@ class Fitness:
 
 
     # función para evaluar la población
-    def evaluate_population(self, population):
+    def __evaluate_population(self, population):
         # obtener X e y de los datos
         X = self.datos.iloc[:, :-1].values
         y = self.datos.iloc[:, -1].values

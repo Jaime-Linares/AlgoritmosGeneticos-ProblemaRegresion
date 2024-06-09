@@ -1,8 +1,7 @@
 import itertools
 import pandas as pd
-from src.AG1_LinaresBarrea_ChicoCastellano import AG1
+from AG1_LinaresBarrera_ChicoCastellano import AG1
 from sklearn.metrics import root_mean_squared_error, r2_score
-import time
 
 class GeneticAlgorithmTester:
     
