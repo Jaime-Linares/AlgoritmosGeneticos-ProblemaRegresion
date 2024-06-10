@@ -43,12 +43,12 @@ class AG:
         fitness_poblacion_inicial = fitness_p_i.fitness_poblacion()
         
         # generamos los padres de la población inicial
-        k = 3
+        k = 5
         padres = Padres(fitness_poblacion_inicial, poblacion_inicial, self.num_ind)
         seleccion_padres = padres.seleccion_padres_por_torneo(k)
 
         # generamos los hijos cruzando los padres
-        probabilidad_no_cruce = 0.2
+        probabilidad_no_cruce = 0.8
         mark = 0
         cruce = Cruce(seleccion_padres, self.num_ind, probabilidad_no_cruce, fitness_poblacion_inicial, self.crossover_method, mark, self.verbose)
         hijos_cruzados = cruce.cruzar()
@@ -56,15 +56,15 @@ class AG:
         
         # generamos los hijos mutando los hijos cruzados
         generaciones_sin_mejora=0
-        probabilidad_baja=0.1
-        probabilidad_alta=0.4
+        probabilidad_baja=0.2
+        probabilidad_alta=0.9
         umbral_estancamiento=5
         mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial,probabilidad_baja, probabilidad_alta, umbral_estancamiento)
         hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial), generaciones_sin_mejora)
 
         # poblacion a iterar y la tasa de elitismo usada para generar las nuevas generaciones
         poblacion_a_iterar = hijos_mutados
-        tasa_elitismo = 0.2
+        tasa_elitismo = 0.05
 
 
         # --------------------------------------------------------------------------------------

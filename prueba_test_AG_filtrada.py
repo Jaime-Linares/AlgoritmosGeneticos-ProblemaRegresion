@@ -1,32 +1,14 @@
-import itertools
 import pandas as pd
-from AG1_LinaresBarrera_ChicoCastellano import AG1
+from src.AG1_LinaresBarrera_ChicoCastellano import AG1
 from sklearn.metrics import mean_squared_error, r2_score
+import ast
 
-
-class GeneticAlgorithmTester:
+class GeneticAlgorithmTesterFiltered:
     
-    #Contructor de la clase
-    def __init__(self, population_method_vals, crossover_method_vals, probabilidad_baja_vals, probabilidad_alta_vals, k_vals, tasa_elitismo_vals, tasa_no_cruce_vals, datos_train, datos_test, seed, num_ind, max_iter, verbose):
-        self.param_grid = {
-            'population_method': population_method_vals,
-            'crossover_method': crossover_method_vals,
-            'probabilidad_baja': probabilidad_baja_vals,
-            'probabilidad_alta': probabilidad_alta_vals,
-            'k': k_vals,
-            'tasa_elitismo': tasa_elitismo_vals,
-            'tasa_no_cruce': tasa_no_cruce_vals
-        }
-        #Generamos todas las posibles combinaciones de hiperparámetros
-        self.param_combinations = list(itertools.product(
-            self.param_grid['population_method'],
-            self.param_grid['crossover_method'],
-            self.param_grid['probabilidad_baja'],
-            self.param_grid['probabilidad_alta'],
-            self.param_grid['k'],
-            self.param_grid['tasa_elitismo'],
-            self.param_grid['tasa_no_cruce']
-        ))
+    #Es una clase muy similar al de test, solo que en vez de probar con todas las combinaciones de hiperparámetros, solo utiliza las n primeras del dataset que genera la otra clase test
+    #El pbjetivo es poder probar las mejores combinaciones de hiperparámetros en varios ficheros, y desechar aquellas que no hayan funcionado correctamente
+    def __init__(self, param_combinations, datos_train, datos_test, seed, num_ind, max_iter, verbose):
+        self.param_combinations = param_combinations
         self.results = []
         self.datos_train = datos_train
         self.datos_test = datos_test
@@ -36,7 +18,7 @@ class GeneticAlgorithmTester:
         self.verbose = verbose
 
     #Ejecutamos el algoritmo 20 veces y calculamos la media de r2 para saber su rendimiento
-    def AG(self, population_method, crossover_method,probabilidad_baja, probabilidad_alta, k, tasa_elitismo, tasa_no_cruce, combo):
+    def AG(self, population_method, crossover_method, probabilidad_baja, probabilidad_alta, k, tasa_elitismo, tasa_no_cruce, combo):
         r2_scores = []
         for _ in range(20):
             ag = AG1(
@@ -55,7 +37,7 @@ class GeneticAlgorithmTester:
                 tasa_no_cruce=tasa_no_cruce,
             )
 
-            ind,y_pred = ag.run()
+            ind, y_pred = ag.run()
 
             y_true = pd.read_csv(self.datos_test)['y']
             r2 = r2_score(y_true, y_pred)
@@ -66,11 +48,11 @@ class GeneticAlgorithmTester:
         
         return avg_r2
 
-    #Para cada combinación de hiperparámetros llamamos al método que ejecuta ek algoritmo
+    #Para als n primeras combinaciónes de hiperparámetros llamamos al método que ejecuta el algoritmo
     def run_tests(self):
         print("Comprobando hiperparametros:")
         for combo in self.param_combinations:
-            population_method,crossover_method,probabilidad_baja, probabilidad_alta, k, tasa_elitismo, tasa_no_cruce = combo
+            population_method, crossover_method, probabilidad_baja, probabilidad_alta, k, tasa_elitismo, tasa_no_cruce = combo
             resultado = self.AG(
                 population_method=population_method,
                 crossover_method=crossover_method,
@@ -84,7 +66,7 @@ class GeneticAlgorithmTester:
             self.results.append((combo, resultado))
 
         #Ordenamos los resultados de mayor a menor en función de la media de R2
-        self.results.sort(key=lambda x: x[1],reverse=True)
+        self.results.sort(key=lambda x: x[1], reverse=True)
         mejor_combinacion, mejor_resultado = self.results[0]
         
         #Printeamos la mejor combinación con el mejor resultado
@@ -95,30 +77,31 @@ class GeneticAlgorithmTester:
     #Metodo que guarda en un csv los resultados obtenidos por el algoritmo
     def save_results(self):
         df = pd.DataFrame(self.results, columns=['Hiperparámetros', 'R2'])
-        df.to_csv('data/resultados_algoritmo_genetico.csv', index=False)
-        print("Resultados guardados en 'resultados_algoritmo_genetico.csv'")
+        df.to_csv('data/resultados_algoritmo_genetico_filtrado.csv', index=False)
+        print("Resultados guardados en 'resultados_algoritmo_genetico_filtrado.csv'")
 
 
-##Utilización:
-nombre_dataset = 'toy1'
+#Utilización
+#Lee el fichero que le proporcionemos saltado la primera línea (Es donde se pone los nombres de las columnas)
+filename = 'data/resultados_algoritmo_genetico_filtrado_housing.csv' 
+df = pd.read_csv(filename, header=None, skiprows=1, encoding='utf-8')
+
+# Seleccionar las 10 primeras combinaciones
+filtered_combinations = [ast.literal_eval(combo[0]) for combo in df.values[:20]]
+
+nombre_dataset = 'synt1'
+
 nombre_dataset_train = "data/" + nombre_dataset + "_train.csv"
 nombre_dataset_val = "data/" + nombre_dataset + "_val.csv"
 
-
-tester = GeneticAlgorithmTester(
-	datos_train = nombre_dataset_train, 
-	datos_test = nombre_dataset_val, 
-	seed = 123, 
-	num_ind = 100, 
-	max_iter = 500,
-	verbose = False,
-	population_method_vals = ["diverse", "default"],
-	crossover_method_vals = ["dos_puntos", "uniforme", "default"],
-    probabilidad_baja_vals=[0.01, 0.05, 0.1, 0.2],
-    probabilidad_alta_vals=[0.6, 0.7, 0.8, 0.9],
-    k_vals=[2, 3, 5, 7],
-    tasa_elitismo_vals=[0.01, 0.05, 0.1, 0.2],
-    tasa_no_cruce_vals=[0.2, 0.4, 0.6, 0.8],
+tester = GeneticAlgorithmTesterFiltered(
+    param_combinations = filtered_combinations,
+    datos_train = nombre_dataset_train, 
+    datos_test = nombre_dataset_val, 
+    seed = 123, 
+    num_ind = 100, 
+    max_iter = 500,
+    verbose = False
 )
 
 mejor_combinacion, mejor_resultado = tester.run_tests()

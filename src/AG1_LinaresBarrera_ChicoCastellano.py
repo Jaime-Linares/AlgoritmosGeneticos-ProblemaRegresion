@@ -12,6 +12,7 @@ from src.Prediccion import Prediccion
 
 class AG1:
 
+    #Clase generada para testear de forma automática los hiperparámetros, (muy similar que la clase principal, pero pasando los hiperparámetros por el constructor)
     # constructor
     def __init__(self, datos_train, datos_test, seed, num_ind, max_iter, verbose, population_method, crossover_method,probabilidad_baja, probabilidad_alta, k, tasa_elitismo, tasa_no_cruce):
         self.datos_train = datos_train
@@ -45,8 +46,8 @@ class AG1:
 
         # fitness de la población inicial
         dicc_fitness = {}
-        fitness_p_i = Fitness(datos, poblacion_inicial, self.num_ind)
-        fitness_poblacion_inicial = fitness_p_i.fitness_poblacion(dicc_fitness)
+        fitness_p_i = Fitness(datos, poblacion_inicial)
+        fitness_poblacion_inicial = fitness_p_i.fitness_poblacion()
         
         # generamos los padres de la población inicial
         k = self.k
@@ -77,8 +78,8 @@ class AG1:
         # -------------------------------BUCLE (Nº ITERACIONES)---------------------------------
         for i in range(0, self.max_iter):
             # fitness de la población a iterar
-            fitness_h_m = Fitness(datos, poblacion_a_iterar, self.num_ind)
-            fitness_hijos_mutados = fitness_h_m.fitness_poblacion(dicc_fitness)
+            fitness_h_m = Fitness(datos, poblacion_a_iterar)
+            fitness_hijos_mutados = fitness_h_m.fitness_poblacion()
 
             # trabajamos para obtener la nueva generación
             # elegimos los mejores individuos (20%) de la población actual (elitismo)
@@ -115,8 +116,8 @@ class AG1:
 
         # --------------------------------------------------------------------------------------
         # ------------------------------MEJOR SOLUCIÓN ENCONTRADA-------------------------------
-        fitness_p_f = Fitness(datos, poblacion_a_iterar, self.num_ind)
-        fitness_poblacion_final = fitness_p_f.fitness_poblacion(dicc_fitness)
+        fitness_p_f = Fitness(datos, poblacion_a_iterar)
+        fitness_poblacion_final = fitness_p_f.fitness_poblacion()
         mejor_individuo_encontrado = poblacion_a_iterar[np.argmin(fitness_poblacion_final)]
 
 

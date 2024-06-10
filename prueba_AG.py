@@ -30,7 +30,7 @@ ag = AG (
     # para que diverse funcione correctamente num_ind debe ser múltiplo de 5
 	population_method = "default",
 	# método de cruzado: ("dos_puntos", "uniforme", "default")
-	crossover_method = "uniforme"
+	crossover_method = "dos_puntos"
 )
 
 
