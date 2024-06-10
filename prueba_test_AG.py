@@ -1,8 +1,7 @@
 import itertools
 import pandas as pd
-from AG1_LinaresBarrera_ChicoCastellano import AG1
-from sklearn.metrics import mean_squared_error, r2_score
-
+from src.AG1_LinaresBarrera_ChicoCastellano import AG1
+from sklearn.metrics import root_mean_squared_error, r2_score
 
 class GeneticAlgorithmTester:
     

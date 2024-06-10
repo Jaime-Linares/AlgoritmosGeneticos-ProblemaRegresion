@@ -5,11 +5,10 @@ import math
 
 class Cruce:
 
-    def __init__(self, padres, num_ind, probabilidad_no_cruce, fitness, crossover_method, mark, verbose):
+    def __init__(self, padres, num_ind, probabilidad_no_cruce, crossover_method, mark, verbose):
         self.padres = padres
         self.num_ind = num_ind
         self.probabilidad_no_cruce = probabilidad_no_cruce
-        self.fitness = fitness
         self.metodo = crossover_method
         self.mark = mark
         self.verbose= verbose
@@ -28,7 +27,7 @@ class Cruce:
         else:
             if(self.verbose and self.mark==0):
                 print("Metodo de cruce: default")
-            return self.__cruce_uniforme()
+            return self.__cruce_default()
 
 
     # cruce de dos puntos (seleccionamos dos puntos al azar y cruzamos los padres en esos puntos)
