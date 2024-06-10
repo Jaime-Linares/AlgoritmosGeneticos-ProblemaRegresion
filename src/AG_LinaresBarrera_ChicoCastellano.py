@@ -59,7 +59,7 @@ class AG:
         probabilidad_baja=0.2
         probabilidad_alta=0.9
         umbral_estancamiento=5
-        mutacion = Mutacion(hijos_cruzados, fitness_poblacion_inicial,probabilidad_baja, probabilidad_alta, umbral_estancamiento)
+        mutacion = Mutacion(hijos_cruzados,probabilidad_baja, probabilidad_alta, umbral_estancamiento)
         hijos_mutados = mutacion.mutar(np.min(fitness_poblacion_inicial), generaciones_sin_mejora)
 
         # poblacion a iterar y la tasa de elitismo usada para generar las nuevas generaciones
